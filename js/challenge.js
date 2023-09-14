@@ -70,6 +70,7 @@ function submitFunc (event){
     const p = document.createElement('p')
     p.textContent = comment
     div.append(p)
+    event.target.reset()
 }
 
 
