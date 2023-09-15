@@ -5,29 +5,26 @@ const likes = document.querySelector("#heart")
 const pause = document.querySelector('#pause')
 const div = document.querySelector('#list')
 const form = document.querySelector('#comment-form')
+const numberLikes = {}
+let intervalId = setInterval(()=>{counter.textContent++},1000)
 
-console.log(minus, plus)
-
-let pauseWasClicked = false
 
 minus.addEventListener("click", incrementor)
 plus.addEventListener("click", incrementor)
 likes.addEventListener("click", liker)
-
-const numberLikes = {}
+pause.addEventListener('click',stopFunc)
+form.addEventListener('submit', submitFunc)
 
 function incrementor(e){
-    if (!pauseWasClicked){
     const operation = e.target.id
     if (operation === 'minus'){
         counter.textContent--
     } else if (operation === 'plus'){
         counter.textContent++
-    }}
+    }
 }
 
 function liker(e){
-    if (!pauseWasClicked){
     const currentNumber = counter.textContent
     if (numberLikes[currentNumber]){
         numberLikes[currentNumber]++
@@ -38,31 +35,27 @@ function liker(e){
         numberLikes[currentNumber] = 1
         likeLine.textContent = `${currentNumber} was liked 1 time`
         document.querySelector('ul').append(likeLine)
-    }}
-
-
+    }
 }
-// while (let i < Infinity){...}
-
-setInterval(()=>{
-    if (!pauseWasClicked){
-    counter.textContent++}
-},1000)
-pause.addEventListener('click',stopFunc)
 
 function stopFunc(){
-    if (!pauseWasClicked){
-        pauseWasClicked=true
-        pause.textContent = 'resume'
+    const buttons = document.querySelectorAll("#minus, #plus, #heart, #submit")
+    if (pause.textContent === ' pause '){
+        pause.textContent = ' resume '
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute("disabled","")
+        }
+        clearInterval(intervalId)
     }
-    else {
-        pauseWasClicked = false
-        pause.textContent = 'pause'
+    else{
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].removeAttribute("disabled","")
+        pause.textContent = ' pause '
+        }
+        clearInterval(intervalId)
+        intervalId = setInterval(()=>{counter.textContent++},1000)
     }
-    
-
 }
-form.addEventListener('submit', submitFunc)
 
 function submitFunc (event){
     event.preventDefault()
@@ -72,12 +65,3 @@ function submitFunc (event){
     div.append(p)
     event.target.reset()
 }
-
-
-// setInterval(()=>{
-//     counter.textContent--
-// },1000)
-
-// create list elements with the number displyed and the amount of times it was liked
-// append that to ul
-
